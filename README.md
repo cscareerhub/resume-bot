@@ -1,5 +1,8 @@
+[![Discord Chat](https://img.shields.io/discord/334891772696330241.svg)](https://discord.gg/ndFR4RF)
+[![License](https://img.shields.io/github/license/CS-Career-Hackers/resume-bot.svg)](LICENSE)
 # Resume-Bot
-A role-by-reacts role management bot for Discord.
+
+A bot that keeps track of resumes to be reviewed.
 
 ## Set up
 
