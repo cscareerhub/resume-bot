@@ -13,11 +13,13 @@ load_dotenv(dotenv_path)
 
 TOKEN = os.environ.get('TOKEN')
 PRODUCTION_ENV = os.environ.get("ENVIRONMENT") != "DEV"
+UNAME = os.environ.get("USERNAME")
+PWD = os.environ.get("PASSWORD")
 listen_chan = os.environ.get("PROD_CHAN") if PRODUCTION_ENV else os.environ.get("DEV_CHAN")
 error_message = "that's an invalid query. Try !resume help to see commands. PSA: please anonymize your resumes."
 
 bot = Bot(command_prefix=PREFIX)
-db = Database("name")
+db = Database("resumebot", uname=UNAME, pwd=PWD, host="db")
 
 
 # Bot Events
@@ -35,6 +37,7 @@ async def on_message(msg):
     if msg.channel.name == listen_chan:
         await bot.process_commands(msg)
 
+# Bot commands
 @bot.group(pass_context=True)
 async def resume(ctx):
     if ctx.invoked_subcommand is None:
