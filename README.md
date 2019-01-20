@@ -6,7 +6,7 @@ A bot that keeps track of resumes to be reviewed.
 
 ## Set up
 
-* Clone the repository and install dependencies using `pip install -r requirements.txt`. This bot requires Python 3.4.2+ to run smoothly.
+* Clone the repository and install dependencies using `pip install -r requirements.txt`. This bot requires Python 3.6+ to run smoothly.
 
 ## Usage
 
