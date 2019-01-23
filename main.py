@@ -116,19 +116,19 @@ async def show(ctx, *args):
         await bot.send_message(ctx.message.channel, error_message)
         return
     if len(args) == 0:
-        n = 3
+        nb_resumes = 3
     elif args[0] == "all":
-        n = 999
+        nb_resumes = 999
     else:
         try:
-            n = int(args[0])
+            nb_resumes = int(args[0])
         except:
             await bot.send_message(ctx.message.channel, error_message)
             return
-        if n == 0:
+        if nb_resumes == 0:
             await bot.send_message(ctx.message.channel, "you really want zero resumes? Try again, kiddo.")
             return
-    result = db.show_resumes(n)
+    result = db.show_resumes(nb_resumes)
     if result.is_success:
         msg_content = ["resumes currently in the queue:"]
         for (user_id, resume) in result.data:
