@@ -20,7 +20,7 @@ class Database:
                 database = self.db
         
         class Resume(BaseModel):
-            user_id = peewee.IntegerField(primary_key=True)
+            user_id = peewee.TextField(unique=True)
             resume = peewee.TextField()
             id = peewee.AutoField()
 
@@ -45,11 +45,8 @@ class Database:
     
     def pop_resume(self):
         try:
-            resume_model = self.Resume.select(self.Resume.user_id, self.Resume.resume).order_by(self.Resume.id).get()
-            user_id = resume_model.user_id
-            resume = resume_model.resume
-            resume_model.delete_instance()
-            return Result(is_success=True, data=(user_id, resume))
+            resume_model = self.Resume.select().order_by(self.Resume.id.asc()).first()
+            return self.delete_resume(resume_model.user_id)
         except peewee.DoesNotExist:
             return Result(is_success=False)
 
@@ -66,7 +63,7 @@ class Database:
         nb_rows_modified = update_query.execute()
         return Result(is_success=nb_rows_modified == 1)
 
-    def show_resumes(self, nb_resumes):
+    def show_resumes(self, nb_resumes=None):
         resumes = self.Resume.select(self.Resume.user_id, self.Resume.resume).order_by(self.Resume.id).limit(nb_resumes).tuples()
         return Result(is_success=True, data=resumes)
 

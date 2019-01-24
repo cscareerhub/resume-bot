@@ -15,11 +15,14 @@ TOKEN = os.environ.get('TOKEN')
 PRODUCTION_ENV = os.environ.get("ENVIRONMENT") != "DEV"
 UNAME = os.environ.get("USERNAME")
 PWD = os.environ.get("PASSWORD")
+DB_HOST = os.environ.get("DB_HOST")
+DB_NAME = os.environ.get("DB_NAME")
 listen_chan = os.environ.get("PROD_CHAN") if PRODUCTION_ENV else os.environ.get("DEV_CHAN")
 error_message = "that's an invalid query. Try !resume help to see commands. PSA: please anonymize your resumes."
 
 bot = Bot(command_prefix=PREFIX)
-db = Database("resumebot", uname=UNAME, pwd=PWD, host="db")
+db = Database(DB_NAME, uname=UNAME, pwd=PWD, host=DB_HOST)
+db.start_connection()
 
 
 # Bot Events
@@ -57,7 +60,7 @@ async def submit(ctx, *args):
     else:
         await bot.send_message(ctx.message.channel, "you already have a resume in the queue. Try !resume replace [resume].")
     
-@resume.group(name='delete', aliases=['delete'], pass_context=True)
+@resume.group(name='delete', aliases=['remove'], pass_context=True)
 async def remove(ctx, *args):
     global db
     if len(args) != 0:
@@ -89,7 +92,7 @@ async def poll(ctx, *args):
     if query_result.is_success:
         (user_id, resume) = query_result.data
         user = await bot.get_user_info(user_id)
-        await bot.send_message(ctx.message.channel, f"resume by {user}: <{resume}>")
+        await bot.send_message(ctx.message.channel, f"resume by {user.mention}: <{resume}>")
     else:
         await bot.send_message(ctx.message.channel, "there are no resumes currently in the queue.")
 
@@ -100,7 +103,7 @@ async def peek(ctx, *args):
         await bot.send_message(ctx.message.channel, error_message)
         return
     result = db.show_resumes(1)
-    if result.is_success:
+    if result.is_success and len(result.data):
         msg_content = ["resumes currently in the queue:"]
         for (user_id, resume) in result.data:
             user = await bot.get_user_info(user_id)
@@ -116,9 +119,9 @@ async def show(ctx, *args):
         await bot.send_message(ctx.message.channel, error_message)
         return
     if len(args) == 0:
-        nb_resumes = 3
+        result = db.show_resumes(3)
     elif args[0] == "all":
-        nb_resumes = 999
+        result = db.show_resumes()
     else:
         try:
             nb_resumes = int(args[0])
@@ -128,7 +131,7 @@ async def show(ctx, *args):
         if nb_resumes == 0:
             await bot.send_message(ctx.message.channel, "you really want zero resumes? Try again, kiddo.")
             return
-    result = db.show_resumes(nb_resumes)
+        result = db.show_resumes(nb_resumes)
     if result.is_success:
         msg_content = ["resumes currently in the queue:"]
         for (user_id, resume) in result.data:
