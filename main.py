@@ -107,7 +107,7 @@ async def peek(ctx, *args):
         msg_content = ["resumes currently in the queue:"]
         for (user_id, resume) in result.data:
             user = await bot.get_user_info(user_id)
-            msg_content.append(f"{user}: <{resume}>")
+            msg_content.append(f"{user.mention}: <{resume}>")
         await bot.send_message(ctx.message.author, "\n".join(msg_content))
     else:
         await bot.send_message(ctx.message.channel, "there are no resumes currently in the queue.")
@@ -136,7 +136,7 @@ async def show(ctx, *args):
         msg_content = ["resumes currently in the queue:"]
         for (user_id, resume) in result.data:
             user = await bot.get_user_info(user_id)
-            msg_content.append(f"{user}: <{resume}>")
+            msg_content.append(f"{user.mention}: <{resume}>")
         await bot.send_message(ctx.message.author, "\n".join(msg_content))
     else:
         await bot.send_message(ctx.message.channel, "there are no resumes currently in the queue.")

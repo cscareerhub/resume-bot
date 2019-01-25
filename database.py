@@ -44,11 +44,10 @@ class Database:
             return Result(is_success=False)
     
     def pop_resume(self):
-        try:
-            resume_model = self.Resume.select().order_by(self.Resume.id.asc()).first()
-            return self.delete_resume(resume_model.user_id)
-        except peewee.DoesNotExist:
+        resume_model = self.Resume.select().order_by(self.Resume.id.asc()).first()
+        if resume_model is None:
             return Result(is_success=False)
+        return self.delete_resume(resume_model.user_id)
 
     def delete_resume(self, user_id):
         resume_model = self.Resume.get_or_none(self.Resume.user_id == user_id)
