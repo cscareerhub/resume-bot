@@ -62,7 +62,7 @@ class DatabaseTest(unittest.TestCase):
 
         self.assertTrue(self.Database.delete_resume("Gopher").is_success)
         self.assertEqual(self.Database.Resume.select().count(), 2)
-        
+
         self.assertFalse(self.Database.delete_resume("Gopher").is_success)
         self.assertEqual(self.Database.Resume.select().count(), 2)
 

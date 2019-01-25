@@ -34,17 +34,20 @@ async def on_ready():
     print(bot.user.id)
     print("------")
 
+
 @bot.event
 async def on_message(msg):
     global listen_chan
     if msg.channel.name == listen_chan:
         await bot.process_commands(msg)
 
+
 # Bot commands
 @bot.group(pass_context=True)
 async def resume(ctx):
     if ctx.invoked_subcommand is None:
         await bot.send_message(ctx.message.channel, error_message)
+
 
 @resume.group(name='submit', aliases=['add'], pass_context=True)
 async def submit(ctx, *args):
@@ -58,8 +61,10 @@ async def submit(ctx, *args):
             "successfully added you to the resume queue.\n" +
             "PSA: please anonymize your resumes. You can replace your resume and keep your spot with !resume replace.")
     else:
-        await bot.send_message(ctx.message.channel, "you already have a resume in the queue. Try !resume replace [resume].")
-    
+        await bot.send_message(ctx.message.channel,
+                               "you already have a resume in the queue. Try !resume replace [resume].")
+
+
 @resume.group(name='delete', aliases=['remove'], pass_context=True)
 async def remove(ctx, *args):
     global db
@@ -71,6 +76,7 @@ async def remove(ctx, *args):
     else:
         await bot.send_message(ctx.message.channel, "you don't have a resume in the queue.")
 
+
 @resume.group(name='replace', pass_context=True)
 async def replace(ctx, *args):
     global db
@@ -81,6 +87,7 @@ async def replace(ctx, *args):
         await bot.send_message(ctx.message.channel, "successfully replaced your resume.")
     else:
         await bot.send_message(ctx.message.channel, "you don't have a resume in the queue.")
+
 
 @resume.group(name='poll', aliases=['pop'], pass_context=True)
 async def poll(ctx, *args):
@@ -95,6 +102,7 @@ async def poll(ctx, *args):
         await bot.send_message(ctx.message.channel, f"resume by {user.mention}: <{resume}>")
     else:
         await bot.send_message(ctx.message.channel, "there are no resumes currently in the queue.")
+
 
 @resume.group(name='peek', pass_context=True)
 async def peek(ctx, *args):
@@ -111,6 +119,7 @@ async def peek(ctx, *args):
         await bot.send_message(ctx.message.author, "\n".join(msg_content))
     else:
         await bot.send_message(ctx.message.channel, "there are no resumes currently in the queue.")
+
 
 @resume.group(name='show', pass_context=True)
 async def show(ctx, *args):
@@ -140,6 +149,7 @@ async def show(ctx, *args):
         await bot.send_message(ctx.message.author, "\n".join(msg_content))
     else:
         await bot.send_message(ctx.message.channel, "there are no resumes currently in the queue.")
+
 
 @resume.group(name='help', pass_context=True)
 async def help(ctx):

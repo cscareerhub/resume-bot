@@ -1,9 +1,11 @@
 import peewee
 
+
 class Result:
     def __init__(self, is_success=True, data=None):
         self.is_success = is_success
         self.data = data
+
 
 class Database:
     def __init__(self, db_name, uname="test", pwd="test", host="localhost"):
@@ -18,7 +20,7 @@ class Database:
         class BaseModel(peewee.Model):
             class Meta:
                 database = self.db
-        
+
         class Resume(BaseModel):
             user_id = peewee.TextField(unique=True)
             resume = peewee.TextField()
@@ -42,7 +44,7 @@ class Database:
         except peewee.IntegrityError:
             self.db.rollback()
             return Result(is_success=False)
-    
+
     def pop_resume(self):
         resume_model = self.Resume.select().order_by(self.Resume.id.asc()).first()
         if resume_model is None:
@@ -63,6 +65,6 @@ class Database:
         return Result(is_success=nb_rows_modified == 1)
 
     def show_resumes(self, nb_resumes=None):
-        resumes = self.Resume.select(self.Resume.user_id, self.Resume.resume).order_by(self.Resume.id).limit(nb_resumes).tuples()
+        resumes = self.Resume.select(self.Resume.user_id, self.Resume.resume).order_by(self.Resume.id).limit(
+            nb_resumes).tuples()
         return Result(is_success=True, data=resumes)
-
