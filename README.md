@@ -1,5 +1,6 @@
 [![Discord Chat](https://img.shields.io/discord/334891772696330241.svg)](https://discord.gg/ndFR4RF)
 [![License](https://img.shields.io/github/license/CS-Career-Hackers/resume-bot.svg)](LICENSE)
+[![Build Status](https://travis-ci.org/CS-Career-Hackers/resume-bot.svg?branch=master)](https://travis-ci.org/CS-Career-Hackers/resume-bot)
 # Resume-Bot
 
 A bot that keeps track of resumes to be reviewed.
