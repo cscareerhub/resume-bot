@@ -76,15 +76,21 @@ class Database:
         return Result(is_success=True, data=resumes)
 
     # Users Stuff
+    # TODO: merge insert and update into one function with on_conflict
+    def insert_user(self, user_id):
+        try:
+            user = self.Users(user_id=user_id, post_count=0)
+            nb_rows_modified = user.save()
+            return Result(is_success=nb_rows_modified == 1)
+        except peewee.IntegrityError:
+            self.db.rollback()
+            return Result(is_success=False)
+
     def update_user(self, user_id):
-        query = self.Users.insert(user_id=user_id, post_count=0).on_conflict(
-            conflict_target=[self.Users.user_id],
-            update={self.Users.post_count: self.Users.post_count + 1})
+        self.Users.update({self.Users.post_count: self.Users.post_count + 1}) \
+            .where(self.Users.user_id == user_id)
 
-        print(query.sql())
-        query.execute()
-
-        return self.Users.get(self.Users.user_id == user_id).post_count
+        return Result(is_success=True, data=self.Users.get(self.Users.user_id == user_id).post_count)
 
     def remove_user(self, user_id):
         user = self.Users.get_or_none(self.Users.user_id == user_id)
