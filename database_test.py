@@ -10,10 +10,12 @@ class DatabaseTest(unittest.TestCase):
 
     def test_valid_table(self):
         tables = self.db.get_tables()
-        self.assertEqual(sorted(tables), ['resume'])
+        self.assertEqual(sorted(tables), ['resume', 'users'])
         cols_res = self.db.get_columns('resume')
+        cols_res2 = self.db.get_columns('users')
 
         self.assertTrue(len(cols_res) == 3)
+        self.assertTrue(len(cols_res2) == 3)
 
     def test_push_resume(self):
         resume = "imgur.com/iamaresume"

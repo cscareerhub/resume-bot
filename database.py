@@ -35,7 +35,7 @@ class Database:
 
     def start_connection(self):
         self.db.connect()
-        self.db.create_tables([self.Resume])
+        self.db.create_tables([self.Resume, self.Users])
         self.db.commit()
 
     def end_connection(self):
