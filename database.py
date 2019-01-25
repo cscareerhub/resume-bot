@@ -77,10 +77,10 @@ class Database:
 
     # Users Stuff
     def update_user(self, user_id):
-        self.Users.insert(user_id=user_id, post_count=1).on_conflict(preserve=[self.Users.user_id],
-                                                                     update={
-                                                                         self.Users.post_count: self.Users.post_count + 1
-                                                                     }).execute()
+        self.Users.insert(user_id=user_id, post_count=1).on_conflict(
+            conflict_target=[user_id],
+            preserve=[self.Users.user_id],
+            update={self.Users.post_count: self.Users.post_count + 1}).execute()
         return self.Users.get(self.Users.user_id == user_id).post_count
 
     def remove_user(self, user_id):
