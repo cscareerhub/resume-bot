@@ -87,8 +87,8 @@ class Database:
             return Result(is_success=False)
 
     def update_user(self, user_id):
-        self.Users.update({self.Users.post_count: self.Users.post_count + 1}) \
-            .where(self.Users.user_id == user_id)
+        self.Users.update(post_count=self.Users.post_count + 1) \
+            .where(self.Users.user_id == user_id).execute()
 
         return Result(is_success=True, data=self.Users.get(self.Users.user_id == user_id).post_count)
 

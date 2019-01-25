@@ -99,7 +99,7 @@ class DatabaseTest(unittest.TestCase):
         self.assertEqual(r1.data, 1)
         self.assertEqual(r2.data, 2)
         self.assertEqual(r3.data, 1)
-        
+
     def test_user_contains(self):
         # given
         user1 = "001"
