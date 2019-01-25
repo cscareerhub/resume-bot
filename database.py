@@ -78,7 +78,7 @@ class Database:
     # Users Stuff
     def update_user(self, user_id):
         query = self.Users.insert(user_id=user_id, post_count=0).on_conflict(
-            conflict_target=(self.Users.user_id,),
+            conflict_target=[self.Users.user_id],
             update={self.Users.post_count: self.Users.post_count + 1})
 
         print(query.sql())
