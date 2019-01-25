@@ -111,7 +111,7 @@ class DatabaseTest(unittest.TestCase):
         self.assertTrue(self.Database.check_user_present(user2))
 
     def tearDown(self):
-        self.db.drop_tables([self.Database.Resume], safe=True)
+        self.db.drop_tables([self.Database.Resume, self.Database.Users], safe=True)
         self.db.close()
 
 
