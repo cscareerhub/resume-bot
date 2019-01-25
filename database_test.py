@@ -66,6 +66,48 @@ class DatabaseTest(unittest.TestCase):
         self.assertFalse(self.Database.delete_resume("Gopher").is_success)
         self.assertEqual(self.Database.Resume.select().count(), 2)
 
+    def test_user_insert(self):
+        # given
+        user1 = "001"
+        user2 = "002"
+
+        # when
+        self.Database.update_user(user1)
+        n2 = self.Database.update_user(user2)
+        n1 = self.Database.update_user(user1)
+
+        # then
+        self.assertEqual(n1, 2)
+        self.assertEqual(n2, 1)
+
+    def test_user_contains(self):
+        # given
+        user1 = "001"
+        self.Database.update_user(user1)
+
+        # when
+        b = self.Database.check_user_present(user1)
+
+        # then
+        self.assertTrue(b)
+
+    def test_user_removal(self):
+        # given
+        user1 = "001"
+        user2 = "002"
+        user3 = "003"
+        self.Database.update_user(user1)
+        self.Database.update_user(user2)
+
+        # when
+        b1 = self.Database.remove_user(user1)
+        b3 = self.Database.remove_user(user3)
+
+        # then
+        self.assertTrue(b1)
+        self.assertFalse(b3)
+        self.assertTrue(self.Database.check_user_present(user2))
+
     def tearDown(self):
         self.db.drop_tables([self.Database.Resume], safe=True)
         self.db.close()

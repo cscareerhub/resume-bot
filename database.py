@@ -26,7 +26,12 @@ class Database:
             resume = peewee.TextField()
             id = peewee.AutoField()
 
+        class Users(BaseModel):
+            user_id = peewee.TextField(unique=True)
+            post_count = peewee.IntegerField(null=False)
+
         self.Resume = Resume
+        self.Users = Users
 
     def start_connection(self):
         self.db.connect()
@@ -36,6 +41,7 @@ class Database:
     def end_connection(self):
         self.db.close()
 
+    # Resume stuff
     def push_resume(self, user_id, resume):
         try:
             resume_model = self.Resume(user_id=user_id, resume=resume)
@@ -68,3 +74,23 @@ class Database:
         resumes = self.Resume.select(self.Resume.user_id, self.Resume.resume).order_by(self.Resume.id).limit(
             nb_resumes).tuples()
         return Result(is_success=True, data=resumes)
+
+    # Users Stuff
+    def update_user(self, user_id):
+        self.Users.insert(user_id=user_id, post_count=1).on_conflict(preserve=[self.Users.user_id],
+                                                                     update={
+                                                                         self.Users.post_count: self.Users.post_count + 1
+                                                                     }).execute()
+        return self.Users.get(self.Users.user_id == user_id).post_count
+
+    def remove_user(self, user_id):
+        user = self.Users.get_or_none(self.Users.user_id == user_id)
+
+        if user is None:
+            return False
+
+        user.delete_instance()
+        return True
+
+    def check_user_present(self, user_id):
+        return self.Users.get_or_none(self.Users.user_id == user_id) is not None
