@@ -27,7 +27,7 @@ class Database:
             id = peewee.AutoField()
 
         class Users(BaseModel):
-            user_id = peewee.TextField(unique=True)
+            user_id = peewee.TextField(unique=True, primary_key=True)
             post_count = peewee.IntegerField(null=False)
 
         self.Resume = Resume
@@ -77,7 +77,7 @@ class Database:
 
     # Users Stuff
     def update_user(self, user_id):
-        self.Users.insert(user_id=user_id, post_count=1).on_conflict(
+        self.Users.insert(user_id=user_id, post_count=0).on_conflict(
             conflict_target=[self.Users.user_id],
             update={self.Users.post_count: self.Users.post_count + 1}).execute()
         return self.Users.get(self.Users.user_id == user_id).post_count
