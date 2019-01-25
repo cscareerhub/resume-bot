@@ -15,7 +15,7 @@ class DatabaseTest(unittest.TestCase):
         cols_res2 = self.db.get_columns('users')
 
         self.assertTrue(len(cols_res) == 3)
-        self.assertTrue(len(cols_res2) == 2)
+        self.assertTrue(len(cols_res2) == 3)
 
     def test_push_resume(self):
         resume = "imgur.com/iamaresume"
